@@ -1,0 +1,64 @@
+# Restaurant Recommendation API
+
+## Overview
+This AWS Lambda-based API provides restaurant recommendations based on user preferences. It interacts with DynamoDB to fetch restaurants that match the requested style and optionally filter for vegetarian options.
+
+## Features
+- Retrieves restaurant recommendations based on `style` (e.g., Italian, Mexican, etc.).
+- Filters restaurants based on operational hours.
+- Supports optional `vegetarian` filter.
+- Implements error handling for missing or incorrect parameters.
+
+## Prerequisites
+- AWS account with access to Lambda and DynamoDB.
+- AWS CLI configured with appropriate permissions.
+- Python 3.x installed locally (for testing and development).
+
+## Setup Instructions
+1. **Deploying Lambda Function**
+   - Extract the contents of `lambda.zip`.
+   - Modify `api1.py` if needed.
+   - Upload the function to AWS Lambda using the AWS CLI or console.
+   
+2. **Configuring DynamoDB**
+   - Create a table named `Restaurants` with a primary key of `style` (String).
+   - Ensure the table contains attributes such as `openHour`, `closeHour`, and `vegetarian`.
+
+3. **Configuring API Gateway**
+   - Set up an API Gateway to trigger the Lambda function.
+   - Map query parameters (`style`, `vegetarian`) to the Lambda event.
+
+## API Usage
+### Endpoint
+```
+GET /recommend?style=<STYLE>&vegetarian=<true|false>
+```
+### Example Request
+```
+GET /recommend?style=Italian&vegetarian=true
+```
+### Example Response
+```json
+{
+  "restaurantRecommendation": {
+    "name": "Luigi's Pasta",
+    "style": "Italian",
+    "openHour": "11:00",
+    "closeHour": "22:00",
+    "vegetarian": true
+  }
+}
+```
+
+## Error Handling
+- `400 Bad Request`: Missing or invalid parameters.
+- `404 Not Found`: No matching restaurants.
+- `500 Internal Server Error`: Unexpected failure.
+
+## Future Improvements
+- Implement caching for frequent queries.
+- Extend filtering options (e.g., price range, ratings).
+- Enhance query optimization for better performance.
+
+## License
+This project is licensed under the MIT License.
