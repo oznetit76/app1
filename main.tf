@@ -124,7 +124,7 @@ resource "aws_s3_bucket" "api_logs" {
   }
 
   logging {
-    target_bucket = aws_s3_bucket.api_logs.id
+    target_bucket = "restaurant-api-logs"
     target_prefix = "logs/"
   }
 
