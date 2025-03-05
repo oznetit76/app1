@@ -13,17 +13,6 @@ resource "aws_dynamodb_table" "restaurants" {
   }
 }
 
-resource "aws_dynamodb_table" "restaurants" {
-  name         = "Restaurants"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "style"
-
-  attribute {
-    name = "style"
-    type = "S"
-  }
-}
-
 resource "aws_dynamodb_table_item" "pizza_hut" {
   table_name = aws_dynamodb_table.restaurants.name
   hash_key   = "style"
@@ -146,8 +135,14 @@ resource "aws_s3_bucket" "api_logs" {
       }
     }
   }
+  lifecycle_rule {
+    id      = "expire-old-logs"
+    enabled = true
+    expiration {
+      days = 30 # Automatically delete logs older than 30 days
+    }
+  }
 }
-
 resource "aws_iam_policy" "lambda_logging" {
   name        = "LambdaLoggingPolicy"
   description = "Allows Lambda to write logs to S3 securely"
